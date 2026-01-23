@@ -28,14 +28,22 @@ class ImpedanceViewer(QWidget):
         self.open_button.clicked.connect(self.open_file)
         main_layout.addWidget(self.open_button)
 
+        # splitter between zmap and plethys
+        self.splitter = QSplitter(Qt.Vertical, self)
+
         # ventilation map image view
         self.zmap_view = pg.ImageView(self)
-        main_layout.addWidget(self.zmap_view, 5)
+        self.zmap_view.ui.menuBtn.hide()
+        self.zmap_view.ui.roiBtn.hide()
 
         self.plethys_plot = pg.PlotWidget(self)
         self.plethys_plot.showGrid(x=True, y=True)
         self.plethys_curve = (self.plethys_plot).plot()
-        main_layout.addWidget(self.plethys_plot, 3)
+
+        self.splitter.addWidget(self.zmap_view)
+        self.splitter.addWidget(self.plethys_plot)
+        self.splitter.setSizes([500, 300])
+        main_layout.addWidget(self.splitter, 1)
 
         # ins/exp markers
         self.ins_scatter = pg.ScatterPlotItem(
